@@ -1,0 +1,16 @@
+# In build.yaml
+builders:
+  route_name_builder:
+    import: "package:sub_app_core/generator/builder_runner/route.dart"
+    builder_factories: ["routeNameBuilder"]
+    build_extensions: { ".dart": [".route.dart"] } # Must match generatedExtension
+    auto_apply: dependents
+    build_to: source
+    runs_before:
+      - sub_app_core:routes_aggregator
+  routes_aggregator:
+    import: "package:sub_app_core/generator/builder_runner/routes_aggregator_generator.dart"
+    builder_factories: ["routesAggregatorBuilder"]
+    build_extensions: {} # Defined in the generator itself
+    auto_apply: "root_package"
+    build_to: source
