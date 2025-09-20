@@ -41,7 +41,13 @@ class RoutesAggregatorBuilder extends Builder {
     final buffer = StringBuffer();
     buffer.writeln('// GENERATED CODE - DO NOT MODIFY BY HAND\n');
     buffer.writeln("import 'package:go_router/go_router.dart';\n");
-    buffer.writeln("import 'package:jobs/router/routes.dart';\n");
+    buffer.writeln(
+      "import 'package:${buildStep.inputId.package}/router/routes.dart';\n",
+    );
+    //
+
+    buffer.writeln("//import all the required paths");
+
     routeFilePaths.forEach((path) => buffer.writeln("import '$path';"));
 
     buffer.writeln('\nclass Routes {');
