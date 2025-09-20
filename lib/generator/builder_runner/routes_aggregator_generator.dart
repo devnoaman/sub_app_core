@@ -46,6 +46,31 @@ class RoutesAggregatorBuilder extends Builder {
 
     buffer.writeln('\nclass Routes {');
     buffer.writeln('  Routes._();\n');
+
+    for (final path in routeFilePaths) {
+      // This logic robustly gets the filename (e.g., 'home_view')
+      final baseName = p
+          .basenameWithoutExtension(path)
+          .replaceAll('.route', '');
+
+      // This logic converts a snake_case filename to a PascalCase class name
+      // e.g., 'home_view' -> 'HomeView'
+      final className = baseName
+          .split('_')
+          .map(
+            (word) => word.isNotEmpty
+                ? word[0].toUpperCase() + word.substring(1)
+                : '',
+          )
+          .join('');
+      final variableName =
+          '${className?[0].toLowerCase()}${className?.substring(1)}Instance';
+      // Appends 'Route.route' to the class name, e.g., 'HomeViewRoute.route'
+      buffer.writeln('///  ${variableName} instance ');
+      buffer.writeln(
+        '   static final ${variableName}  =  ${className}Route.instance;',
+      );
+    }
     buffer.writeln('  static final all = <AppRoute>[');
 
     for (final path in routeFilePaths) {
