@@ -63,7 +63,7 @@ class RouteNameBuilder extends GeneratorForAnnotation<GenerateRoute> {
       
       import 'package:flutter/material.dart';
       import 'package:go_router/go_router.dart';
-      import 'package:$packageName/router/routes.dart';
+      import 'package:$packageName/router/router.dart';
       ${addExtra == true && extraModel != null ? extraModel.getField('extraRelativePath').toString() : ''}
 
       import '$sourceFileUri';

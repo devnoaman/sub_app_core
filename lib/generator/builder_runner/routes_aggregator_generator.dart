@@ -10,7 +10,7 @@ class RoutesAggregatorBuilder extends Builder {
   // This tells build_runner to trigger this builder when it finds 'lib/router/routes.dart'.
   @override
   Map<String, List<String>> get buildExtensions => {
-    'lib/router/routes.dart': ['lib/router/routes.g.dart'],
+    'lib/router/router.dart': ['lib/router/router.g.dart'],
   };
 
   @override
@@ -18,7 +18,7 @@ class RoutesAggregatorBuilder extends Builder {
     // The final output file will be created at lib/router/routes.g.dart
     final outputId = AssetId(
       buildStep.inputId.package,
-      'lib/router/routes.g.dart',
+      'lib/router/router.g.dart',
     );
 
     final routeFilePaths = <String>[];
@@ -40,15 +40,30 @@ class RoutesAggregatorBuilder extends Builder {
     // Build the content of the final Routes class.
     final buffer = StringBuffer();
     buffer.writeln('// GENERATED CODE - DO NOT MODIFY BY HAND\n');
-    buffer.writeln("import 'package:go_router/go_router.dart';\n");
+    // buffer.writeln("import 'package:go_router/go_router.dart';\n");
     buffer.writeln(
-      "import 'package:${buildStep.inputId.package}/router/routes.dart';\n",
+      "import 'package:${buildStep.inputId.package}/router/router.dart';\n",
     );
     //
 
     buffer.writeln("//import all the required paths");
 
     routeFilePaths.forEach((path) => buffer.writeln("import '$path';"));
+    buffer.writeln('''
+/// The [Routes] class provides static access to all route instances used in the application.
+/// 
+/// This class is auto-generated and should not be modified by hand. It imports all the required
+/// route files and exposes each route as a static final instance for easy access throughout the app.
+/// 
+/// - Each route (e.g., `HomeViewRoute`, `WorksViewRoute`) is imported and exposed as a static field.
+/// - The `all` list contains all route instances, which can be used for route registration or iteration.
+/// 
+/// Example usage:
+/// ```dart
+/// final homeRoute = Routes.homeViewInstance;
+/// final allRoutes = Routes.all;
+/// ```
+''');
 
     buffer.writeln('\nclass Routes {');
     buffer.writeln('  Routes._();\n');
@@ -72,11 +87,13 @@ class RoutesAggregatorBuilder extends Builder {
       final variableName =
           '${className?[0].toLowerCase()}${className?.substring(1)}Instance';
       // Appends 'Route.route' to the class name, e.g., 'HomeViewRoute.route'
-      buffer.writeln('///  ${variableName} instance ');
+      buffer.writeln('///Static instance of[${className}Route]');
       buffer.writeln(
         '   static final ${variableName}  =  ${className}Route.instance;',
       );
     }
+
+    buffer.writeln('/// List containing all route instances.');
     buffer.writeln('  static final all = <AppRoute>[');
 
     for (final path in routeFilePaths) {

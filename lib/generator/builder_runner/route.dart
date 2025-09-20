@@ -1,5 +1,6 @@
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
+// import 'package:sub_app_core/generator/builder/route_base_builder.dart';
 
 import '../builder/route_name_builder.dart';
 
@@ -19,3 +20,17 @@ Builder routeNameBuilder(BuilderOptions options) {
         '.route.dart', // A custom extension for the standalone file
   );
 }
+
+// Builder routeBaseBuilder(BuilderOptions options) {
+//   return LibraryBuilder(
+//     Route(),
+//     // Use the header property to add imports to the top of the generated file
+//     // header: "import 'package:go_router/go_router.dart';",
+//     generatedExtension:
+//         '.info.dart', // A custom extension for the standalone file
+//   );
+// }
+
+// readme_generator/lib/builder.dart (cont.)
+// A factory function that returns your builder.
+// Builder readmeBuilder(BuilderOptions options) => RouteBaseBuilder();
